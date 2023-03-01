@@ -29,7 +29,8 @@
                 try {
                     const response = await axios.post('api/auth/login', postData)
                     if (response.status === 200) {
-                        console.log('đang nhập thành công');
+                        //chuyển hướng về trang index
+                        this.$router.push({ path: '/index' })
                     }
                 } catch (error) {
                     
