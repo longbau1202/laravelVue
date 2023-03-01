@@ -133,10 +133,10 @@ check-eslint: ## Run check eslint in source
 
 
 composer-install: ## Run Composer install in APP container
-	docker exec -t idaas_app composer install
+	docker exec -t laravelvue_app composer install
 
 npm-install: ## Run NPM install in APP container
-	rm -rf node_modules && docker exec -t --user 0 idaas_app npm install
+	rm -rf node_modules && docker exec -t --user 0 laravelvue_app npm install
 
 up-db: ## Migrate database for all tenant
 	docker exec -t idaas_app sh ./phinxMigrateForAllCustomer.sh
