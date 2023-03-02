@@ -35,7 +35,7 @@ on-app-prod: ## On app in production mode
 	@docker images --format "- {{.Tag}}" idaas-app
 	@read -p "Run iDaas app with docker image TAG [latest]: " TAG; \
 	set -eux; \
-	docker-compose up -d idaas_db; \
+	docker-compose up -d laravelvue_db; \
 	TAG=$${TAG:=latest} docker-compose \
 		-f docker-compose.yml \
 		-f docker-compose.prod.yml \

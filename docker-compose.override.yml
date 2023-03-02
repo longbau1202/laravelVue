@@ -70,7 +70,7 @@ services:
       - 3307:3306
     environment:
       MYSQL_ROOT_PASSWORD: cdmllove
-      MYSQL_DATABASE: laravelvue_unittest
+      MYSQL_DATABASE: laravel
       TZ: Asia/Tokyo
     volumes:
       - data-mysql-laravelvue:/var/lib/mysql:delegated
