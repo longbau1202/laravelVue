@@ -169,3 +169,6 @@ sync-pre-commit:
 # 		printf "Turn off 2step login for db ${COMMAND_COLOR}$$dbname${NO_COLOR} founded in ${COMMAND_COLOR}$$application_ini${NO_COLOR}\n";\
 # 		mysql -pcdmllove $$dbname -e "update crm_member set member_used_2auth=0 where member_id=1;";\
 # 	done
+
+migrate-laravel: 
+	docker exec -t laravelvue_app php artisan migrate

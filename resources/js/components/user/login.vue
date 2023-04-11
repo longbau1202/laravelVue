@@ -2,10 +2,10 @@
     <body>
         <div class="container">
             <h1>Login</h1>
-            <form>
+            <form v-on:submit.prevent="login">
                 <input type="text" v-model="username" placeholder="Email or Phone Number" />
                 <input type="password" v-model="password" placeholder="Password" />
-                <button type="button" @click="login">login</button> 
+                <button type="submit">login</button> 
             </form>
         </div>
     </body>
@@ -27,7 +27,8 @@
                     password: this.password,
                 }
                 try {
-                    const response = await axios.post('api/auth/login', postData)
+                    const response = await axios.post('api/auth/login', postData);
+                    localStorage.setItem('storedData',JSON.stringify(response.data));
                     if (response.status === 200) {
                         //chuyển hướng về trang index
                         this.$router.push({ path: '/index' })

@@ -1,11 +1,13 @@
 <template>
     <body>
         <div class="container">
-            <h1>Detail</h1>
-            <form>
-                <input type="text" v-model="userInfo.id">
-                <input type="text" v-model="userInfo.name"/>
-                <input type="email" v-model="userInfo.email"/>
+            <h1>Register</h1>
+            <form v-on:submit.prevent="register">
+                <input type="text" v-model="name" placeholder="name" />
+                <input type="email" v-model="email" placeholder="Email" />
+                <input type="password" v-model="password" placeholder="Password" /> 
+                <input type="password" v-model="password_confirmation" placeholder="password_confirmation" /> 
+                <button type="submit">register</button> 
             </form>
         </div>
     </body>
@@ -15,21 +17,31 @@
     export default {
         data() {
             return {
-                userInfo: {},
+                name: '',
+                email: '',
+                password: '',
+                password_confirmation: '',
             }
         },
-        mounted() {
-            this.getInfo();
-        },
+        
         methods: {
-            getInfo() {
-                const response = axios.get('api/auth/detail').then(response => {
-                    this.userInfo = response.data.data; // Gán dữ liệu người dùng vào biến user
-                    console.log(this.userInfo);
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+            async register() {
+                const postData = {
+                    name: this.name,
+                    email: this.email,
+                    password: this.password,
+                    password_confirmation: this.password_confirmation,
+                }
+                try {
+                    const response = await axios.post('api/auth/register', postData);
+                    localStorage.setItem('storedData',JSON.stringify(response.data));
+                    if (response.status === 200) {
+                        //chuyển hướng về trang index
+                        this.$router.push({ path: '/index' })
+                    }
+                } catch (error) {
+                    
+                }
             }
         },
     }
