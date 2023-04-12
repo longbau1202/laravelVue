@@ -3,17 +3,15 @@
         <body>
             <h1>Danh sách sản phẩm</h1>
             <ul class="product-list">
-                <li class="product-item">
-                    <h2 class="product-name">Tên sản phẩm 1</h2>
-                    <p class="product-brand">Thương hiệu: Thương hiệu 1</p>
-                    <p class="product-price">Giá: $100</p>
-                    <p class="product-description">Mô tả: Mô tả sản phẩm 1</p>
+                <li v-if="products.length > 0 " v-for="product in products" class="product-item">
+                    <h2 class="product-name">{{ product.product_name }}</h2>
+                    <p class="product-brand">Thương hiệu: {{ product.product_brand }}</p>
+                    <p class="product-price">Giá: {{ product.product_price }}</p>
+                    <p class="product-description">Mô tả: {{ product.product_description }}</p>
+                    <button v-on:click.prevent="editProduct(product.id)">edit</button>
                 </li>
-                <li class="product-item">
-                    <h2 class="product-name">Tên sản phẩm 2</h2>
-                    <p class="product-brand">Thương hiệu: Thương hiệu 2</p>
-                    <p class="product-price">Giá: $200</p>
-                    <p class="product-description">Mô tả: Mô tả sản phẩm 2</p>
+                <li class="product-item" v-else>
+                    <h2 class="product-name"> Không có thông tin nào cả </h2>
                 </li>
                 <!-- Các sản phẩm khác được thêm vào đây -->
             </ul>
@@ -21,7 +19,36 @@
     </div>
 </template>
 
-<script></script>
+<script>
+    export default {
+        data () {
+            return {
+                products: {}
+            }
+        },
+
+        mounted() {
+            this.getProduct();
+        },
+
+        methods: {
+            getProduct (){
+                try {
+                    const response = axios.get('/api/product/list').then(response => {
+                        this.products = response.data.data; // Gán dữ liệu người dùng vào biến product
+                    });
+                } catch (error) {
+                    console.log(error);
+                }
+            },
+
+            editProduct (productId){
+                this.$router.push({ path: `/product/edit/${productId}`})
+            }
+        },
+
+    }
+</script>
 <style lang="css" scoped>
 body {
     font-family: Arial, sans-serif;

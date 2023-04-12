@@ -5,6 +5,7 @@
         <input type="button" @click="logout" value="logout">
         <button type="button" v-on:click="register">register</button>
         <button type="button" v-on:click="addProduct">add product</button>
+        <button type="button" v-on:click="listProduct">list product</button>
     </div>
     <div>
         <RouterView></RouterView>
@@ -25,7 +26,7 @@
             async logout () {
                 const isLoggerIn = localStorage.getItem('storedData');
                 if(isLoggerIn) {
-                    const response = await axios.post('api/auth/logout');
+                    const response = await axios.post('/api/auth/logout');
                     if(response.data){
                         localStorage.removeItem('storedData');
                     }
@@ -40,6 +41,10 @@
 
             addProduct () {
                 this.$router.push({ path: '/product/add'})
+            },
+
+            listProduct () {
+                this.$router.push({ path: '/product/list'})
             }
         },
     }

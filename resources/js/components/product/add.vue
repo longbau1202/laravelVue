@@ -5,15 +5,23 @@
         <form v-on:submit.prevent="addProduct">
             <label for="product_name">Tên sản phẩm:</label>
             <input type="text" id="product_name" v-model="product_name" required>
+            <span class="error" v-if="errors.product_name">{{ errors.product_name[0] }}</span>
+            <br>
             <br>
             <label for="product_brand">Thương hiệu:</label>
             <input type="text" id="product_brand" v-model="product_brand" required>
+            <span class="error" v-if="errors.product_brand">{{ errors.product_brand[0] }}</span>
+            <br>
             <br>
             <label for="product_price">Giá:</label>
             <input type="number" id="product_price" v-model="product_price" required>
+            <span class="error" v-if="errors.product_price">{{ errors.product_price[0] }}</span>
+            <br>
             <br>
             <label for="product_description">Mô tả:</label>
             <textarea id="product_description" v-model="product_description" required></textarea>
+            <span class="error" v-if="errors.product_description">{{ errors.product_description[0] }}</span>
+            <br>
             <br>
             <input type="submit"  value="Thêm sản phẩm">
         </form>
@@ -29,6 +37,7 @@
                 product_brand: '',
                 product_price: '',
                 product_description: '',
+                errors: {}
             }
         },
 
@@ -43,10 +52,15 @@
                 try {
                     const response = await axios.post('/api/product/add', postData);
                     if (response.data) {
-                        alert(response.data.message);
+                        const check = confirm(response.data.message);
+                        if (check) {
+                            this.$router.push('/index');
+                        }
                     }
                 } catch (error) {
-                    
+                    if (error.response.status === 422) {
+                        this.errors = error.response.data.errors;
+                    }
                 }
             }
 
@@ -77,5 +91,8 @@ label, input, textarea {
 input[type="submit"] {
     margin-top: 10px;
     cursor: pointer;
+}
+.error {
+    color: rgb(194, 59, 59);
 }
 </style>

@@ -25,7 +25,6 @@
             getInfo() {
                 const response = axios.get('api/auth/detail').then(response => {
                     this.userInfo = response.data.data; // Gán dữ liệu người dùng vào biến user
-                    console.log(this.userInfo);
                 })
                 .catch(error => {
                     console.error(error);

@@ -5,6 +5,8 @@ import login from '../components/user/login.vue';
 import register from '../components/user/register.vue';
 import detail from '../components/user/detail.vue';
 import addProduct from '../components/product/add.vue';
+import listProduct from '../components/product/list.vue';
+import editProduct from '../components/product/edit.vue';
 
 const routes = [
 	{
@@ -42,6 +44,23 @@ const routes = [
 		meta: {
 			requiresAuth: true,
 		}
+	},
+	{
+		path: '/product/list',
+		name: 'listProduct',
+		component: listProduct,
+		meta: {
+			requiresAuth: true,
+		}
+	},
+	{
+		path: '/product/edit/:id',
+		name: 'editProduct',
+		component: editProduct,
+		meta: {
+			requiresAuth: true,
+		},
+		props: true,
 	},
 	
 ]
