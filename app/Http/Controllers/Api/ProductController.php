@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Models\Category;
 use Illuminate\Http\Response;
 
 class ProductController extends Controller
@@ -15,7 +16,15 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products= Product::with('category')->get();
+
+        // join query 
+        // $product = Product::leftJoin('categories', 'products.product_brand', '=', 'categories.id')
+        // ->select('products.*', 'categories.category_name')->get();
+
+        return response()->json([
+            'data' => $products,
+        ]);
     }
 
     /**
@@ -26,7 +35,7 @@ class ProductController extends Controller
         $product = Product::create($request->all());
 
         return response()->json([
-            'message' => 'Tạo thành công',
+            'message' => 'Tạo thành công, nhấn cancel để tiếp tục add sản phẩm khác',
         ], Response::HTTP_OK);
     }
 
@@ -49,17 +58,28 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit(Product $product, $id)
     {
-        //
+        $product = Product::where('id', $id)->first();
+        return response()->json([
+            'data' => $product,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, $id)
     {
-        //
+        $data = $request->all();
+        $product = Product::findOrFail($id);
+        $product->fill($data);
+        $product->save();
+
+        return response()->json([
+            'status' => 'Success',
+            'message' => 'Sửa thành công',
+        ], 200);
     }
 
     /**
