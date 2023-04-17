@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Models\Category;
 use Illuminate\Http\Response;
 
 class ProductController extends Controller
@@ -15,9 +16,14 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product::all();
+        $products= Product::with('category')->get();
+
+        // join query 
+        // $product = Product::leftJoin('categories', 'products.product_brand', '=', 'categories.id')
+        // ->select('products.*', 'categories.category_name')->get();
+
         return response()->json([
-            'data' => $product,
+            'data' => $products,
         ]);
     }
 

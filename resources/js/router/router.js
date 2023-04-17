@@ -7,6 +7,9 @@ import detail from '../components/user/detail.vue';
 import addProduct from '../components/product/add.vue';
 import listProduct from '../components/product/list.vue';
 import editProduct from '../components/product/edit.vue';
+import addCategory from '../components/category/add.vue';
+import listCategory from '../components/category/list.vue';
+import editCategory from '../components/category/edit.vue';
 
 const routes = [
 	{
@@ -57,6 +60,31 @@ const routes = [
 		path: '/product/edit/:id',
 		name: 'editProduct',
 		component: editProduct,
+		meta: {
+			requiresAuth: true,
+		},
+		props: true,
+	},
+	{
+		path: '/category/add',
+		name: 'addCategory',
+		component: addCategory,
+		meta: {
+			requiresAuth: true,
+		},
+	},
+	{
+		path: '/category/list',
+		name: 'listCategory',
+		component: listCategory,
+		meta: {
+			requiresAuth: true,
+		},
+	},
+	{
+		path: '/category/edit/:id',
+		name: 'editCategory',
+		component: editCategory,
 		meta: {
 			requiresAuth: true,
 		},

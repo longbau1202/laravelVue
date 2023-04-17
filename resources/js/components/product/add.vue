@@ -8,8 +8,11 @@
             <span class="error" v-if="errors.product_name">{{ errors.product_name[0] }}</span>
             <br>
             <br>
-            <label for="product_brand">Thương hiệu:</label>
-            <input type="text" id="product_brand" v-model="product_brand" required>
+            <label for="product_name">Thương hiệu:</label>
+            <select v-model="product_brand">
+                <option value="" disabled selected></option>
+                <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.category_name }}</option>
+            </select>
             <span class="error" v-if="errors.product_brand">{{ errors.product_brand[0] }}</span>
             <br>
             <br>
@@ -33,12 +36,17 @@
     export default {
         data() {
             return {
+                categories: {},
                 product_name: '',
                 product_brand: '',
                 product_price: '',
                 product_description: '',
                 errors: {}
             }
+        },
+
+        mounted() {
+            this.getCategory();
         },
 
         methods: {
@@ -62,8 +70,13 @@
                         this.errors = error.response.data.errors;
                     }
                 }
-            }
+            },
 
+            async getCategory() {
+                const categories = await axios.get('/api/category/list').then(categories => {
+                    this.categories = categories.data.data; // Gán dữ liệu người dùng vào biến
+                }) 
+            },
         }
     }
 </script>

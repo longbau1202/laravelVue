@@ -5,7 +5,7 @@
             <ul class="product-list">
                 <li v-if="products.length > 0 " v-for="product in products" class="product-item">
                     <h2 class="product-name">{{ product.product_name }}</h2>
-                    <p class="product-brand">Thương hiệu: {{ product.product_brand }}</p>
+                    <p class="product-brand">Thương hiệu: {{ product.category.category_name }}</p>
                     <p class="product-price">Giá: {{ product.product_price }}</p>
                     <p class="product-description">Mô tả: {{ product.product_description }}</p>
                     <button v-on:click.prevent="editProduct(product.id)">edit</button>
@@ -43,7 +43,7 @@
             },
 
             editProduct (productId){
-                this.$router.push({ path: `/product/edit/${productId}`})
+                this.$router.push({ path: `/product/edit/${productId}`});
             }
         },
 

@@ -8,8 +8,11 @@
             <span class="error" v-if="errors.product_name">{{ errors.product_name[0] }}</span>
             <br>
             <br>
-            <label for="product_brand">Thương hiệu:</label>
-            <input type="text" id="product_brand" v-model="product.product_brand" required>
+            <select v-model="product.product_brand">
+                <option value="" disabled selected>Thương hiệu:</option>
+                <option v-for="category in categories" :value="category.id" :key="category.id" :selected="category.id == product.product_brand">{{ category.category_name }}</option>
+            </select>
+
             <span class="error" v-if="errors.product_brand">{{ errors.product_brand[0] }}</span>
             <br>
             <br>
@@ -35,12 +38,13 @@
         data() {
             return {
                 product: {},
-                errors: {}
+                errors: {},
+                categories: {},
             }
         },
-
         mounted() {
             this.getProduct();
+            this.getCategory();
         },
 
         methods: {
@@ -55,6 +59,10 @@
                 } catch (error) {
                     this.errors = error.response.data.errors
                 }
+            },
+            async getCategory () {
+                const categories = await axios.get('/api/category/list');
+                this.categories = categories.data.data
             }
         }
     }

@@ -19,7 +19,6 @@
                 password: '',
             }
         },
-        
         methods: {
             async login() {
                 const postData = {
@@ -29,10 +28,8 @@
                 try {
                     const response = await axios.post('api/auth/login', postData);
                     localStorage.setItem('storedData',JSON.stringify(response.data));
-                    if (response.status === 200) {
-                        //chuyển hướng về trang index
-                        this.$router.push({ path: '/index' })
-                    }
+                    this.$root.handleCheckLogin(true);
+                    this.$router.push('/index');
                 } catch (error) {
                     
                 }
