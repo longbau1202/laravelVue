@@ -3,6 +3,11 @@
     <body>
         <h1>Thêm sản phẩm</h1>
         <form v-on:submit.prevent="addProduct">
+            <label for="image">Chọn ảnh:</label>
+            <input type="file" id="image" ref="image" @change="onFileChange">
+            <img :src="imageUrl" v-if="imageUrl">
+            <br>
+            <br>
             <label for="product_name">Tên sản phẩm:</label>
             <input type="text" id="product_name" v-model="product_name" required>
             <span class="error" v-if="errors.product_name">{{ errors.product_name[0] }}</span>
@@ -41,7 +46,11 @@
                 product_brand: '',
                 product_price: '',
                 product_description: '',
-                errors: {}
+                product_image: '',
+                errors: {},
+                imageUrl: '',
+                avatar: '',
+                image: ''
             }
         },
 
@@ -50,14 +59,35 @@
         },
 
         methods: {
+            onFileChange(e) {
+                const file = e.target.files[0];
+                if (!file) {
+                    return false;
+                }
+                if (file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/jpeg') {
+                    this.alert('Định dạng ảnh phải là png, jpg, jpeg');
+                    this.imageUrl = '';
+                    return false;
+                }
+                this.avatar = file;
+                this.imageUrl = URL.createObjectURL(file);
+            },
             async addProduct() {
+                if (this.avatar) { 
+                        const formData = new FormData();
+                        formData.append('image', this.avatar);
+                        this.image = await axios.post('/api/product/upload-image', formData);
+                }
                 const postData = {
                     product_name: this.product_name,
                     product_brand: this.product_brand,
                     product_price: this.product_price,
                     product_description: this.product_description,
+                    product_image: this.image.data.path ? this.image.data.path : ''
                 }
+                
                 try {
+                    
                     const response = await axios.post('/api/product/add', postData);
                     if (response.data) {
                         const check = confirm(response.data.message);
@@ -74,7 +104,7 @@
 
             async getCategory() {
                 const categories = await axios.get('/api/category/list').then(categories => {
-                    this.categories = categories.data.data; // Gán dữ liệu người dùng vào biến
+                    this.categories = categories.data.data.data; // Gán dữ liệu người dùng vào biến
                 }) 
             },
         }
@@ -107,5 +137,9 @@ input[type="submit"] {
 }
 .error {
     color: rgb(194, 59, 59);
+}
+img {
+    width: 50px;
+    height: 50px;
 }
 </style>

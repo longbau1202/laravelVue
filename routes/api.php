@@ -29,6 +29,7 @@ Route::middleware('api')->group(function (){
 
     Route::get('/auth/detail', [LoginController::class, 'detail']);
 
+    Route::post('/product/upload-image', [ProductController::class, 'upload']);
     Route::post('/product/add', [ProductController::class, 'create']);
     Route::get('/product/list', [ProductController::class, 'index']);
     Route::get('/product/edit/{id}', [ProductController::class, 'edit']);

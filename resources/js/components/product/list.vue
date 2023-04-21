@@ -5,6 +5,7 @@
             <div>
                 <ul class="product-list">
                 <li v-if="products.length > 0 " v-for="product in products" class="product-item">
+                    <img :src="`/storage/${product.product_image}`" alt="image">
                     <h2 class="product-name">{{ product.product_name }}</h2>
                     <p class="product-brand">Thương hiệu: {{ product.category.category_name }}</p>
                     <p class="product-price">Giá: {{ product.product_price }}</p>
@@ -89,6 +90,10 @@ h1 {
 .product-price,
 .product-description {
     margin-bottom: 5px;
+}
+img {
+    width: 50px;
+    height: 50px;
 }
 
 </style>
