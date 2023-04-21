@@ -2,7 +2,8 @@
     <div>
         <body>
             <h1>Danh sách sản phẩm</h1>
-            <ul class="product-list">
+            <div>
+                <ul class="product-list">
                 <li v-if="products.length > 0 " v-for="product in products" class="product-item">
                     <h2 class="product-name">{{ product.product_name }}</h2>
                     <p class="product-brand">Thương hiệu: {{ product.category.category_name }}</p>
@@ -14,7 +15,12 @@
                     <h2 class="product-name"> Không có thông tin nào cả </h2>
                 </li>
                 <!-- Các sản phẩm khác được thêm vào đây -->
-            </ul>
+                </ul>
+            </div>
+            <div>
+                <button @click="getProduct(current_page - 1)" :disabled="current_page === 1">Previous</button>
+                <button @click="getProduct(current_page + 1)" :disabled="current_page === paginate.last_page">Next</button>
+            </div>
         </body>
     </div>
 </template>
@@ -23,7 +29,9 @@
     export default {
         data () {
             return {
-                products: {}
+                products: {},
+                paginate: {},
+                current_page: 1
             }
         },
 
@@ -32,11 +40,12 @@
         },
 
         methods: {
-            getProduct (){
+            async getProduct (page = 1){
+                this.current_page = page;
                 try {
-                    const response = axios.get('/api/product/list').then(response => {
-                        this.products = response.data.data; // Gán dữ liệu người dùng vào biến product
-                    });
+                    const response = await axios.get(`/api/product/list?page=${page}`);
+                    this.products = response.data.data.data; // Gán dữ liệu người dùng vào biến product
+                    this.paginate = response.data.data;
                 } catch (error) {
                     console.log(error);
                 }

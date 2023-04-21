@@ -2,18 +2,24 @@
     <div>
         <body>
             <h1>Danh sách thương hiệu</h1>
-            <ul class="category-list">
-                <li v-if="categories.length > 0 " v-for="category in categories" class="category-item">
-                    <h2 class="category-name">{{ category.category_name }}</h2>
-                    <p class="category-code">Code: {{ category.category_code }}</p>
-                    <p class="category-description">Mô tả: {{ category.category_description }}</p>
-                    <button v-on:click.prevent="editCategory(category.id)">edit</button>
-                </li>
-                <li class="category-item" v-else>
-                    <h2 class="category-name"> Không có thông tin nào cả </h2>
-                </li>
-                <!-- Các sản phẩm khác được thêm vào đây -->
-            </ul>
+            <div>
+                <ul class="category-list">
+                    <li v-if="categories.length > 0 " v-for="category in categories" class="category-item">
+                        <h2 class="category-name">{{ category.category_name }}</h2>
+                        <p class="category-code">Code: {{ category.category_code }}</p>
+                        <p class="category-description">Mô tả: {{ category.category_description }}</p>
+                        <button v-on:click.prevent="editCategory(category.id)">edit</button>
+                    </li>
+                    <li class="category-item" v-else>
+                        <h2 class="category-name"> Không có thông tin nào cả </h2>
+                    </li>
+                    <!-- Các sản phẩm khác được thêm vào đây -->
+                </ul>
+            </div>
+            <div>
+                <button v-on:click="getCategory(current_page - 1)" :disabled="current_page === 1">Previous</button>
+                <button v-on:click="getCategory(current_page + 1)" :disabled="current_page === paginate.last_page">next</button>
+            </div>
         </body>
     </div>
 </template>
@@ -22,7 +28,9 @@
     export default {
         data () {
             return {
-                categories: {}
+                categories: {},
+                current_page: 1,
+                paginate: {},
             }
         },
 
@@ -31,11 +39,12 @@
         },
 
         methods: {
-            getCategory (){
+            async getCategory (page = 1){
+                this.current_page = page;
                 try {
-                    const response = axios.get('/api/category/list').then(response => {
-                        this.categories = response.data.data; // Gán dữ liệu người dùng vào biến category
-                    });
+                    const response = await axios.get(`/api/category/list?page=${page}`)
+                    this.categories = response.data.data.data; // Gán dữ liệu người dùng vào biến category
+                    this.paginate = response.data.data
                 } catch (error) {
                     console.log(error);
                 }

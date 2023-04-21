@@ -16,12 +16,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products= Product::with('category')->get();
-
-        // join query 
-        // $product = Product::leftJoin('categories', 'products.product_brand', '=', 'categories.id')
-        // ->select('products.*', 'categories.category_name')->get();
-
+        $products= Product::with('category')->paginate(4);
         return response()->json([
             'data' => $products,
         ]);
