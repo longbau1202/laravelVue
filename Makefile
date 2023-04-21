@@ -172,3 +172,5 @@ sync-pre-commit:
 
 migrate-laravel: 
 	docker exec -t laravelvue_app php artisan migrate
+rollback-migrate-laravel: 
+	docker exec -t laravelvue_app php artisan migrate:rollback

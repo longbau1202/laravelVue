@@ -34,6 +34,15 @@ class ProductController extends Controller
         ], Response::HTTP_OK);
     }
 
+    public function upload(Request $request)
+    {
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('/images');
+            return response()->json(['path' => $path]);
+        }
+        return response()->json(['error' => 'No file was uploaded.']);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
