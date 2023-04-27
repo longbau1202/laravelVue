@@ -17,7 +17,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $sort = $request->sort;
-        if ($sort === '') {
+        if (empty($sort) || $sort === '') {
             $products= Product::with('category')->paginate(4);
             return response()->json([
                 'data' => $products,

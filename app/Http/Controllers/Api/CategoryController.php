@@ -15,7 +15,7 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $sort = $request->sort;
-        if ($sort === '') {
+        if (empty($sort) || $sort === '') {
             $category = Category::paginate(5);
             return response()->json([
                 'data' => $category,
