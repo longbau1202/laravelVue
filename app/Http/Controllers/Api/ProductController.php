@@ -14,9 +14,18 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products= Product::with('category')->paginate(4);
+        $sort = $request->sort;
+        if ($sort === '') {
+            $products= Product::with('category')->paginate(4);
+            return response()->json([
+                'data' => $products,
+            ]);
+        } 
+        
+        $products= Product::with('category')->orderBy('product_name', $sort)->paginate(4);
+
         return response()->json([
             'data' => $products,
         ]);
@@ -41,6 +50,14 @@ class ProductController extends Controller
             return response()->json(['path' => $path]);
         }
         return response()->json(['error' => 'No file was uploaded.']);
+    }
+
+    public function search(Request $request) 
+    {
+        $products= Product::with('category')->where('product_name', $request->value)->paginate(4);
+        return response()->json([
+            'data' => $products,
+        ]);
     }
 
     /**

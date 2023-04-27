@@ -4,6 +4,7 @@
             <h1>Danh sách thương hiệu</h1>
             <div>
                 <ul class="category-list">
+                    <button @click="sortData" :value="sort">sort</button>
                     <li v-if="categories.length > 0 " v-for="category in categories" class="category-item">
                         <h2 class="category-name">{{ category.category_name }}</h2>
                         <p class="category-code">Code: {{ category.category_code }}</p>
@@ -31,6 +32,7 @@
                 categories: {},
                 current_page: 1,
                 paginate: {},
+                sort: 'ASC'
             }
         },
 
@@ -42,9 +44,9 @@
             async getCategory (page = 1){
                 this.current_page = page;
                 try {
-                    const response = await axios.get(`/api/category/list?page=${page}`)
+                    const response = await axios.get(`/api/category/list?page=${page}&sort=DESC`)
                     this.categories = response.data.data.data; // Gán dữ liệu người dùng vào biến category
-                    this.paginate = response.data.data
+                    this.paginate = response.data.data;
                 } catch (error) {
                     console.log(error);
                 }
@@ -52,7 +54,18 @@
 
             editCategory (categoryId){
                 this.$router.push({ path: `/category/edit/${categoryId}`})
-            }
+            },
+
+            async sortData () {
+                const response = await axios.get(`/api/category/list?sort=${this.sort}`)
+                this.categories = response.data.data.data; // Gán dữ liệu người dùng vào biến category
+                this.paginate = response.data.data;
+                if (this.sort === 'DESC') {
+                    this.sort = 'ASC';
+                } else {
+                    this.sort = 'DESC';
+                }
+            },
         },
 
     }

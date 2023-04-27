@@ -12,13 +12,22 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $category = Category::paginate(5);
-
+        $sort = $request->sort;
+        if ($sort === '') {
+            $category = Category::paginate(5);
+            return response()->json([
+                'data' => $category,
+            ]);
+        }
+        
+        $category = Category::orderBy('category_name', $sort)->paginate(5);
         return response()->json([
             'data' => $category,
         ]);
+
+        
     }
 
     /**
