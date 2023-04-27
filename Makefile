@@ -35,7 +35,7 @@ on-app-prod: ## On app in production mode
 	@docker images --format "- {{.Tag}}" idaas-app
 	@read -p "Run iDaas app with docker image TAG [latest]: " TAG; \
 	set -eux; \
-	docker-compose up -d idaas_db; \
+	docker-compose up -d laravelvue_db; \
 	TAG=$${TAG:=latest} docker-compose \
 		-f docker-compose.yml \
 		-f docker-compose.prod.yml \
@@ -126,17 +126,17 @@ show-log-db: ## Show log mysql server container
 # show-log-saml: ## Show log saml server - keycloak container
 # 	docker logs -f keycloak
 npm-run: ## Run NPM run in APP container
-	docker exec -t --user 0 idaas_app npm run dev
+	docker exec -t --user 0 laravelvue_app npm run dev
 
 check-eslint: ## Run check eslint in source
 	docker exec -t --user 0 idaas_app npm run eslint
 
 
 composer-install: ## Run Composer install in APP container
-	docker exec -t idaas_app composer install
+	docker exec -t laravelvue_app composer install
 
 npm-install: ## Run NPM install in APP container
-	rm -rf node_modules && docker exec -t --user 0 idaas_app npm install
+	rm -rf node_modules && docker exec -t --user 0 laravelvue_app npm install
 
 up-db: ## Migrate database for all tenant
 	docker exec -t idaas_app sh ./phinxMigrateForAllCustomer.sh
@@ -169,3 +169,8 @@ sync-pre-commit:
 # 		printf "Turn off 2step login for db ${COMMAND_COLOR}$$dbname${NO_COLOR} founded in ${COMMAND_COLOR}$$application_ini${NO_COLOR}\n";\
 # 		mysql -pcdmllove $$dbname -e "update crm_member set member_used_2auth=0 where member_id=1;";\
 # 	done
+
+migrate-laravel: 
+	docker exec -t laravelvue_app php artisan migrate
+rollback-migrate-laravel: 
+	docker exec -t laravelvue_app php artisan migrate:rollback
